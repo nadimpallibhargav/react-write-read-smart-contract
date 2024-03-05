@@ -21,4 +21,16 @@ contract CrowdFunding {
 
     // variable to store total no.of campaigns
     uint256 public numberOfCampaigns = 0;
+
+    // function for creating a campaign
+    function createCampaign() {}
+
+    // function for donating to campaign
+    function dontateToCampaign() {}
+
+    // function for getting all donators
+    function getDonators() {}
+
+    // function for getting all campaigns
+    function getCampaigns() {}
 }
