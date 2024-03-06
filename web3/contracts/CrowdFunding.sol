@@ -27,7 +27,8 @@ contract CrowdFunding {
         /* need 'memory' for defining string parameters */
     function createCampaign(address _owner, string memory _title, string memory _description, uint256 _target, uint256 _deadline, string memory _image) public returns (uint256) {
         
-        Campaign storage campaign = campaigns[numberOfCampaigns]; // for updating the number of caompaigns
+        // for updating the number of campaigns
+        Campaign storage campaign = campaigns[numberOfCampaigns]; 
 
         // check if the deadline is valid. if the deadline value is in past, show the invalid message        
         require(campaign.deadline < block.timestamp, 'The deadline should be a date in the future.');
@@ -42,14 +43,39 @@ contract CrowdFunding {
         campaign.amountCollected = 0;
         campaign.image = _image;        
 
-        numberOfCampaigns++; // increaments the total campaigns 
+        numberOfCampaigns++; 
 
         return numberOfCampaigns - 1; // returns the recently added campaign, that is campaigns[campaings.length - 1]
 
     }
 
     // function for donating to campaign
-    function dontateToCampaign() {}
+        /* get id of the campaign to donate */
+        /* keyword 'payable' specifies, to send a crycpto currency */
+    function dontateToCampaign(uint256 _id) public payable {
+
+        uint256 amount = msg.value; // variable to store the donator amount
+
+        // mapping to the campaigns
+        Campaign storage campaign = campaigns[_id]; 
+
+        // add the address of the donator
+        campaign.donators.push(msg.sender); 
+
+        // add the donation amount
+        campaign.donations.push(amount); 
+
+        // store the status of donation. if sent successfully to owner
+            /* payable() returns 2 values. so adding a ',' which states that we are expecting a value */
+        (bool sent,) = payable(campaign.owner).call{value: amount}("");
+
+        if(sent) {
+            campaign.amountCollected = campaign.amountCollected + amount;
+        }
+
+
+
+    }
 
     // function for getting all donators
     function getDonators() {}
