@@ -69,12 +69,10 @@ contract CrowdFunding {
             /* payable() returns 2 values. so adding a ',' which states that we are expecting a value */
         (bool sent,) = payable(campaign.owner).call{value: amount}("");
 
+        // if donation sent success. update campaign amount
         if(sent) {
             campaign.amountCollected = campaign.amountCollected + amount;
         }
-
-
-
     }
 
     // function for getting all donators
